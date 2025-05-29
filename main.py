@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from data.weather import CurrentWeatherResponse, HistoricalWeatherResponse
 import httpx
 from fastapi.responses import JSONResponse
@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from datetime import datetime, timedelta
-
+from data.enums.date_range import RangeOption
 load_dotenv()
 
 app = FastAPI()
@@ -22,13 +22,13 @@ app.add_middleware(
 
 API_KEY = os.getenv("API_KEY")
 BASE_URL = os.getenv("BASE_URL")
-
+HISTORY_URL = os.getenv("HISTORY_URL")
 @app.get("/weather")
 async def get_weather(lat: float = 51.5073219, lon: float = -0.1276474):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(
-                f"{BASE_URL}data/2.5/weather",
+                f"{BASE_URL}/data/2.5/weather",
                 params={
                     "lat": lat,
                     "lon": lon, 
@@ -42,11 +42,13 @@ async def get_weather(lat: float = 51.5073219, lon: float = -0.1276474):
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 @app.get("/weather/history")
-async def get_weather_history(lat: float = 51.5073219, lon: float = -0.1276474):
+async def get_weather_history(lat: float = 51.5073219, lon: float = -0.1276474, range: RangeOption = Query(default=RangeOption.one_day, description="Choose from 1, 3, or 30 days")):
     try:
-        # Calculate timestamps for 24 hours ago and current time
-        end_time = int(datetime.now().timestamp())
-        start_time = int((datetime.now() - timedelta(hours=24)).timestamp())
+        
+        now = datetime.now()
+        days = int(range.value)
+        start_time = int((now - timedelta(days=days)).timestamp())
+        end_time = int(now.timestamp())
 
         async with httpx.AsyncClient() as client:
             response = await client.get(
