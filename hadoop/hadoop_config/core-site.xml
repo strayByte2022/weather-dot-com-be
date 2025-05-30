@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+  <!-- Define the default filesystem (HDFS URI) -->
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://namenode:8020</value>
+  </property>
+  <!-- Optional: define a temporary directory -->
+  <property>
+    <name>hadoop.tmp.dir</name>
+    <value>/opt/hadoop/temp</value>
+  </property>
+</configuration>

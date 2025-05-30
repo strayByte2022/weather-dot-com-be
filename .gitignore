@@ -1,1 +1,7 @@
 .env
+.idea
+/hadoop/hadoop_datanode*/
+/hadoop/hadoop_namenode
+/dagster/venv
+/dagster/build
+/__pycache__
