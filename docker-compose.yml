@@ -49,6 +49,24 @@ services:
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@broker-1:9093,2@broker-2:9093,3@broker-3:9093
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_LOG_RETENTION_HOURS: 336
+  
+  ksqldb:
+    image: confluentinc/ksqldb-server:0.29.2
+    container_name: ksqldb-server
+    depends_on:
+      - broker-1, broker-2, broker-3
+    ports:
+      - "8088:8088"
+    environment:
+      KSQL_CONFIG_DIR: "/etc/ksqldb"
+      KSQL_BOOTSTRAP_SERVERS: "broker-1:19092, broker-2:19092, broker-3:19092"
+      KSQL_LISTENERS: "http://0.0.0.0:8088"
+      KSQL_KSQL_SERVICE_ID: "ksql_service_"
+      KSQL_KSQL_STREAMS_AUTO_OFFSET_RESET: "earliest"
+      KSQL_KSQL_STREAMS_NUM_STREAM_THREADS: 4
+      KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: "true"
+      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: "true"
+
 
   namenode:
     image: apache/hadoop:3.4.1

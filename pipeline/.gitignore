@@ -1,5 +1,5 @@
 /venv
-/storage/event_log_storage
+/storage/*/
 /pipeline.egg-info
 .nux
 .telemetry
