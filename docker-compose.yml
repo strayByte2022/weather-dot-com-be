@@ -51,10 +51,12 @@ services:
       KAFKA_LOG_RETENTION_HOURS: 336
   
   ksqldb:
-    image: confluentinc/ksqldb-server:0.29.2
+    image: confluentinc/ksqldb-server:0.29.0
     container_name: ksqldb-server
     depends_on:
-      - broker-1, broker-2, broker-3
+      - broker-1
+      - broker-2
+      - broker-3
     ports:
       - "8088:8088"
     environment:
@@ -66,6 +68,8 @@ services:
       KSQL_KSQL_STREAMS_NUM_STREAM_THREADS: 4
       KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: "true"
       KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: "true"
+      KSQL_LOG4J_OPTS: "-Dlog4j.configuration=file:/etc/ksqldb/log4j.properties"
+      KSQL_OPTS: "-Dconfluent.support.metrics.enable=false"
 
 
   namenode:
