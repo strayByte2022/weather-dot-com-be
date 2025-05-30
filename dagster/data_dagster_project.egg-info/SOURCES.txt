@@ -1,0 +1,12 @@
+README.md
+pyproject.toml
+setup.cfg
+setup.py
+data_dagster_project/__init__.py
+data_dagster_project/assets.py
+data_dagster_project/definitions.py
+data_dagster_project.egg-info/PKG-INFO
+data_dagster_project.egg-info/SOURCES.txt
+data_dagster_project.egg-info/dependency_links.txt
+data_dagster_project.egg-info/requires.txt
+data_dagster_project.egg-info/top_level.txt

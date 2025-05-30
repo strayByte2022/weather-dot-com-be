@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+  <!-- Set the replication factor to match your two DataNodes -->
+  <property>
+    <name>dfs.replication</name>
+    <value>2</value>
+  </property>
+
+  <!-- NameNode storage directory (only used by the NameNode container) -->
+  <property>
+    <name>dfs.namenode.name.dir</name>
+    <value>file:///opt/hadoop/data/nameNode</value>
+  </property>
+
+  <!-- DataNode storage directory (used in both DataNode containers) -->
+  <property>
+    <name>dfs.datanode.data.dir</name>
+    <value>file:///opt/hadoop/data/dataNode</value>
+  </property>
+
+  <!-- Optional: disable permission checking (useful for testing) -->
+  <property>
+    <name>dfs.permissions</name>
+    <value>false</value>
+  </property>
+
+  <property>
+    <name>dfs.webhdfs.enabled</name>
+    <value>true</value>
+</property>
+</configuration>
