@@ -1,0 +1,7 @@
+/venv
+/storage/event_log_storage
+/pipeline.egg-info
+.nux
+.telemetry
+/__pycache__
+/logs
