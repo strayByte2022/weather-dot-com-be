@@ -150,6 +150,86 @@ services:
       hdfs_network:
         ipv4_address: 172.20.0.4
 
+  postgresql:
+    image: postgres:11
+    container_name: postgresql
+    env_file: "./pipeline/postgres/.env"
+    networks:
+      hdfs_network:
+        ipv4_address: 172.20.0.5
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres_user -d postgres_db']
+      interval: 10s
+      timeout: 8s
+      retries: 5
+  
+  user_code:
+    build:
+      context: .
+      dockerfile: ./docker/user/Dockerfile
+    container_name: user_code
+    image: user_code_image
+    restart: always
+    env_file: "./pipeline/.env"
+    environment:
+      DAGSTER_CURRENT_IMAGE: 'user_code_image'
+    networks:
+      default: {}
+      hdfs_network:
+        ipv4_address: 172.20.0.6
+
+  webserver:
+    build:
+      context: .
+      dockerfile: ./docker/dagster/Dockerfile
+    entrypoint:
+      - dagster-webserver
+      - -h
+      - '0.0.0.0'
+      - -p
+      - '3000'
+      - -w
+      - workspace.yaml
+    container_name: webserver
+    expose:
+      - '3000'
+    ports:
+      - '3000:3000'
+    env_file: "./pipeline/.env"
+    volumes: # Make docker client accessible so we can terminate containers from the webserver
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/io_manager_storage:/tmp/io_manager_storage
+    networks:
+      hdfs_network:
+        ipv4_address: 172.20.0.7
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      user_code:
+        condition: service_started
+
+  daemon:
+    build:
+      context: .
+      dockerfile: ./docker/dagster/Dockerfile
+    entrypoint:
+      - dagster-daemon
+      - run
+    container_name: daemon
+    restart: on-failure
+    env_file: "./pipeline/.env"
+    volumes: # Make docker client accessible so we can launch containers using host docker
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/io_manager_storage:/tmp/io_manager_storage
+    networks:
+      hdfs_network:
+        ipv4_address: 172.20.0.8
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      user_code:
+        condition: service_started
+
 networks:
   hdfs_network:
     ipam:
