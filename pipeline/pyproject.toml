@@ -5,7 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.9,<3.13"
 dependencies = [
-    "dagster", "confluent-kafka", "python-dotenv", "dagit", "requests"
+    "dagster", "confluent-kafka", "python-dotenv", "requests", "hdfs", "dagster-docker"
 ]
 
 [project.optional-dependencies]
