@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ws"
+version = "0.1.0"
+description = "Backend that consumes from Kafka topic and pushes through WebSocket to clients"
+authors = [
+  { name = "Your Name", email = "your.email@example.com" }
+]
+readme = "README.md"
+requires-python = ">=3.8"
+
+dependencies = [
+  "fastapi>=0.104.0",
+  "uvicorn[standard]>=0.11.0",
+  "aiokafka<0.12.0",
+  "requests",
+  "httpx"
+]
+
+[project.scripts]
+start-api = "ws.run:main"
