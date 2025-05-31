@@ -1,4 +1,0 @@
-fastapi[standard]
-uvicorn[standard]
-fastapi-cors
-kafka-python==2.0.2
