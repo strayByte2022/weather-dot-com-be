@@ -21,4 +21,4 @@ ensure() {
 }
 
 ensure broker-1 weather_raw_topic
-ensure broker-1 weather_10min_avg
+ensure broker-1 weather_60min_avg
