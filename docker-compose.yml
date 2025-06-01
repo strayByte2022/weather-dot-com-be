@@ -119,6 +119,8 @@ services:
     container_name: datanode1
     hostname: datanode1
     user: root
+    ports:
+    - "9864:9864"
     environment:
       - HADOOP_HOME=/opt/hadoop
     volumes:
@@ -137,6 +139,8 @@ services:
     container_name: datanode2
     hostname: datanode2
     user: root
+    ports:
+    - "9865:9864"
     environment:
       - HADOOP_HOME=/opt/hadoop
     volumes:

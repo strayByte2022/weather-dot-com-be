@@ -38,8 +38,8 @@
       sys->sunset             AS sys_sunset
     FROM weather_raw_stream;
 
-  CREATE TABLE weather_10min_avg
-    WITH (KAFKA_TOPIC='weather_10min_avg', VALUE_FORMAT='JSON') AS
+  CREATE TABLE weather_60min_avg
+    WITH (KAFKA_TOPIC='weather_60min_avg', VALUE_FORMAT='JSON') AS
   SELECT
     'global-key' AS global_key,
     AVG(main_temp) AS avg_temp,
@@ -47,7 +47,7 @@
     AVG(main_humidity) AS avg_humidity,
     AVG(wind_speed) AS avg_wind_speed
   FROM weather_flat_stream
-  WINDOW TUMBLING (SIZE 10 MINUTES)
+  WINDOW TUMBLING (SIZE 60 MINUTES)
   GROUP BY 'global-key';  -- use a dummy key for single-partition stats
   ",
   "streamsProperties": {

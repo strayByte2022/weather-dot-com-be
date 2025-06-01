@@ -7,6 +7,7 @@ from dagster import (
     define_asset_job,
     schedule,
     RunRequest,
+    DefaultScheduleStatus
 )
 import json
 from .resources import OpenWeatherResource, KafkaProducerResource, HDFSWriterResource
@@ -95,13 +96,18 @@ weather_all_locations_job = define_asset_job(
 # Create a schedule to run every minute
 @schedule(
     name="weather_minute_schedule",
-    cron_schedule="* * * * *",
+    cron_schedule="*/5 * * * *",
     job=weather_all_locations_job,
     execution_timezone="UTC",
+    default_status=DefaultScheduleStatus.RUNNING
 )
 def weather_schedule():
+    current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
     for location in weather_locations.get_partition_keys():
-        yield RunRequest(partition_key=location)
+        yield RunRequest(
+            partition_key=location,
+            run_key=f"{location}_{current_time}"
+        )
 
 
 defs = Definitions(
